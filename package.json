@@ -19,5 +19,6 @@
     "postcss": "latest",
     "autoprefixer": "latest"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "license": "MIT"
 }
