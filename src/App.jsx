@@ -370,6 +370,8 @@ function App() {
   const startMin = timeToMinutes(settings.startTime);
   const endMin = Math.max(startMin + 60, timeToMinutes(settings.endTime));
   const calendarHeight = (endMin - startMin) * PX_PER_MINUTE;
+  const timeLabelRowHeight = settings.showTimes ? Math.max(5, Number(settings.timeIncrement) || 15) * PX_PER_MINUTE : 0;
+  const calendarDisplayHeight = calendarHeight + timeLabelRowHeight;
   const isTimeHorizontal = settings.axisOrientation === 'times-horizontal';
   const visibleDays = useMemo(() => {
     const importedDays = Array.isArray(settings.visibleDays) ? settings.visibleDays : DEFAULT_SETTINGS.visibleDays;
@@ -655,10 +657,10 @@ function App() {
     const calendarTop = titleH + calendarSpacing;
     const calendarBottomSpacing = calendarSpacing;
     const headerH = settings.headerHeight;
-    const bodyH = calendarHeight;
+    const lineInc = Math.max(5, Number(settings.timeIncrement) || 15);
+    const bodyH = calendarHeight + timeLabelRowHeight;
     const totalH = calendarTop + headerH + bodyH + calendarBottomSpacing + footerH;
     const dayW = (calendarWidth - timeWidth) / visibleDays.length;
-    const lineInc = Math.max(5, Number(settings.timeIncrement) || 15);
     const svgEvents = displayedEvents.filter((e) => visibleDays.includes(e.day) && timeToMinutes(e.end) > startMin && timeToMinutes(e.start) < endMin);
     const bg = settings.backgroundMode === 'transparent' ? 'none' : effectiveBackgroundColor(settings);
     const bodyBg = settings.backgroundMode === 'transparent' ? '' : `<rect x="0" y="0" width="${width}" height="${totalH}" fill="${escapeXml(bg)}"/>`;
@@ -667,13 +669,17 @@ function App() {
       bgImage = `<image href="${escapeXml(settings.backgroundImage)}" x="0" y="${calendarTop + headerH}" width="${calendarWidth}" height="${bodyH}" preserveAspectRatio="${settings.backgroundImageFit === 'contain' ? 'xMidYMid meet' : settings.backgroundImageFit === 'stretch' ? 'none' : 'xMidYMid slice'}"/>`;
     }
     let lines = '';
-    if (settings.lineMode !== 'none') {
-      for (let t = Math.ceil(startMin / lineInc) * lineInc; t <= endMin; t += lineInc) {
-        const y = calendarTop + headerH + (t - startMin) * PX_PER_MINUTE;
-        const isHour = t % 60 === 0;
-        lines += `<line x1="${timeWidth}" y1="${y}" x2="${calendarWidth}" y2="${y}" stroke="${escapeXml(isHour ? settings.majorLineColor : settings.minorLineColor)}" stroke-width="1"/>`;
-        if (settings.showTimes) lines += `<text x="${timeWidth - 7}" y="${y + 4}" text-anchor="end" font-family="${escapeXml(settings.fontFamily)}" font-size="${isHour ? 12 : 11}" font-weight="${isHour ? 600 : 400}" fill="${escapeXml(settings.scheduleTextColor)}">${escapeXml(formatTime(t, isHour))}</text>`;
-      }
+      if (settings.lineMode !== 'none') {
+        for (let t = Math.ceil(startMin / lineInc) * lineInc; t <= endMin; t += lineInc) {
+          const y = calendarTop + headerH + (t - startMin) * PX_PER_MINUTE;
+          const isHour = t % 60 === 0;
+          lines += `<line x1="${timeWidth}" y1="${y}" x2="${calendarWidth}" y2="${y}" stroke="${escapeXml(isHour ? settings.majorLineColor : settings.minorLineColor)}" stroke-width="1"/>`;
+          if (settings.showTimes) {
+            const labelY = y + (t < endMin ? Math.min(lineInc, endMin - t) * PX_PER_MINUTE : timeLabelRowHeight) / 2;
+            lines += `<text x="${timeWidth - 7}" y="${labelY + 4}" text-anchor="end" font-family="${escapeXml(settings.fontFamily)}" font-size="${isHour ? 12 : 11}" font-weight="${isHour ? 600 : 400}" fill="${escapeXml(settings.scheduleTextColor)}">${escapeXml(formatTime(t, isHour))}</text>`;
+          }
+        }
+        if (timeLabelRowHeight > 0) lines += `<line x1="${timeWidth}" y1="${calendarTop + headerH + bodyH}" x2="${calendarWidth}" y2="${calendarTop + headerH + bodyH}" stroke="${escapeXml(settings.minorLineColor)}" stroke-width="1"/>`;
       if (settings.lineMode === 'grid') {
         for (let i = 0; i <= visibleDays.length; i++) {
           const x = timeWidth + i * dayW;
@@ -916,12 +922,13 @@ function App() {
                   <div role="columnheader" aria-label="Time column" className="w-[58px] shrink-0" />
                   <div className="flex flex-1">{visibleDays.map((day)=><div key={day} role="columnheader" className="flex flex-1 items-center justify-center"><span className="hidden sm:inline">{WEEK_DAYS[day]}</span><span className="sm:hidden">{DAY_SHORT[day]}</span></div>)}</div>
                 </div>
-                <div role="row" className="relative flex" style={{height:calendarHeight, backgroundColor: settings.backgroundMode === 'transparent' ? 'transparent' : effectiveBackgroundColor(settings), backgroundImage: settings.backgroundMode === 'image' && settings.backgroundImage ? `url(${settings.backgroundImage})` : 'none', backgroundSize: settings.backgroundImageFit === 'stretch' ? '100% 100%' : settings.backgroundImageFit, backgroundPosition:'center', backgroundRepeat:'no-repeat'}}>
+                <div role="row" className="relative flex" style={{height:calendarDisplayHeight, backgroundColor: settings.backgroundMode === 'transparent' ? 'transparent' : effectiveBackgroundColor(settings), backgroundImage: settings.backgroundMode === 'image' && settings.backgroundImage ? `url(${settings.backgroundImage})` : 'none', backgroundSize: settings.backgroundImageFit === 'stretch' ? '100% 100%' : settings.backgroundImageFit, backgroundPosition:'center', backgroundRepeat:'no-repeat'}}>
                   <div className="relative w-[58px] shrink-0 border-r" style={{borderColor:settings.majorLineColor}}>
-                    {settings.showTimes && ticks.map((t)=>{const y=(t-startMin)*PX_PER_MINUTE; const major=t%60===0; return <div key={t} className="absolute right-1 whitespace-nowrap text-right leading-none" style={{top:y-5, fontSize:major?12:10, fontWeight:major?600:400, color:settings.scheduleTextColor}}>{formatTime(t,major)}</div>})}
+                    {settings.showTimes && ticks.map((t)=>{const y=(t-startMin)*PX_PER_MINUTE; const slotHeight=t<endMin?Math.min(Math.max(5, Number(settings.timeIncrement) || 15), endMin-t)*PX_PER_MINUTE:timeLabelRowHeight; const major=t%60===0; return <div key={t} className="absolute right-1 -translate-y-1/2 whitespace-nowrap text-right leading-none" style={{top:y+slotHeight/2, fontSize:major?12:10, fontWeight:major?600:400, color:settings.scheduleTextColor}}>{formatTime(t,major)}</div>})}
                   </div>
                   <div className="relative flex-1">
                     {settings.lineMode !== 'none' && ticks.map((t)=>{const y=(t-startMin)*PX_PER_MINUTE; const major=t%60===0; return <div key={t} className="pointer-events-none absolute left-0 right-0 border-t" style={{top:y,borderColor:major?settings.majorLineColor:settings.minorLineColor}}/>})}
+                    {settings.lineMode !== 'none' && timeLabelRowHeight > 0 && <div className="pointer-events-none absolute left-0 right-0 border-t" style={{top:calendarDisplayHeight,borderColor:settings.minorLineColor}}/>}
                     {settings.lineMode === 'grid' && Array.from({length:visibleDays.length + 1},(_,i)=><div key={i} className="pointer-events-none absolute bottom-0 top-0 border-l" style={{left:`${i * 100 / visibleDays.length}%`,borderColor:settings.gridVerticalColor}}/>)}
                     <div className="absolute inset-0 flex">{visibleDays.map((day)=><div key={day} className="relative flex-1" aria-label={`${WEEK_DAYS[day].toLowerCase()} column`}>
                       {displayedEvents.filter((e)=>e.day===day).map((event)=>{
