@@ -1,19 +1,10 @@
 # Weekly Schedule Viewer
 
-A React + Tailwind weekly schedule editor based only on the uploaded MHTML's `aria-label="Schedule calendar"` region.
+A React + Tailwind weekly schedule editor based on San Jose State Unversity's MyScheduler Calender Design.
 
-## Run
+## Preview Image
 
-```bash
-npm install
-npm run dev
-```
-
-Build for production:
-
-```bash
-npm run build
-```
+![preview](images/README/preview.png)
 
 ## Included
 
@@ -32,3 +23,16 @@ npm run build
 - Optional visual merging of closely spaced same-day events
 
 The editor controls are intentionally outside the export surface. Exported image files contain only the schedule plus its optional custom header/footer.
+
+## Run
+
+```bash
+npm install
+npm run dev
+```
+
+Build for production:
+
+```bash
+npm run build
+```
