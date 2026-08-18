@@ -1,6 +1,6 @@
 # Weekly Schedule Viewer
 
-A React + Tailwind weekly schedule editor based on San Jose State Unversity's MyScheduler Calender Design.
+A weekly schedule editor based on San Jose State Unversity's MyScheduler Calender Design. This app is deployed as a github page [HERE](https://elitediamonhawk.github.io/weekly-schedule-viewer/).
 
 ## Preview Image
 
