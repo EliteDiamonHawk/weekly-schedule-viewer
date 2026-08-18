@@ -599,7 +599,8 @@ function App() {
     const calendarSpacing = Math.max(0, Number(settings.calendarMargin) || 0);
     if (isTimeHorizontal) {
       const timeWidth = AXIS_LABEL_WIDTH;
-      const width = timeWidth + calendarHeight;
+      const calendarWidth = timeWidth + calendarHeight;
+      const width = calendarWidth + calendarSpacing * 2;
       const titleH = settings.headerText ? 56 : 0;
       const footerH = settings.footerText ? 48 : 0;
       const calendarTop = titleH + calendarSpacing;
@@ -613,7 +614,7 @@ function App() {
       const bg = settings.backgroundMode === 'transparent' ? 'none' : effectiveBackgroundColor(settings);
       const bodyBg = settings.backgroundMode === 'transparent' ? '' : `<rect x="0" y="0" width="${width}" height="${totalH}" fill="${escapeXml(bg)}"/>`;
       const bgImage = settings.backgroundMode === 'image' && settings.backgroundImage
-        ? `<image href="${escapeXml(settings.backgroundImage)}" x="${timeWidth}" y="${calendarTop + headerH}" width="${width - timeWidth}" height="${bodyH}" preserveAspectRatio="${settings.backgroundImageFit === 'contain' ? 'xMidYMid meet' : settings.backgroundImageFit === 'stretch' ? 'none' : 'xMidYMid slice'}"/>`
+        ? `<image href="${escapeXml(settings.backgroundImage)}" x="${timeWidth}" y="${calendarTop + headerH}" width="${calendarWidth - timeWidth}" height="${bodyH}" preserveAspectRatio="${settings.backgroundImageFit === 'contain' ? 'xMidYMid meet' : settings.backgroundImageFit === 'stretch' ? 'none' : 'xMidYMid slice'}"/>`
         : '';
       let lines = '';
       if (settings.lineMode !== 'none') {
@@ -626,7 +627,7 @@ function App() {
         if (settings.lineMode === 'grid') {
           for (let i = 0; i <= visibleDays.length; i++) {
             const y = calendarTop + headerH + i * dayH;
-            lines += `<line x1="${timeWidth}" y1="${y}" x2="${width}" y2="${y}" stroke="${escapeXml(settings.gridVerticalColor)}" stroke-width="1"/>`;
+            lines += `<line x1="${timeWidth}" y1="${y}" x2="${calendarWidth}" y2="${y}" stroke="${escapeXml(settings.gridVerticalColor)}" stroke-width="1"/>`;
           }
         }
       }
@@ -643,10 +644,11 @@ function App() {
       }).join('');
       const dayHeaders = visibleDays.map((day, index) => `<text x="${timeWidth / 2}" y="${calendarTop + headerH + index * dayH + dayH / 2 + 5}" text-anchor="middle" font-family="${escapeXml(settings.fontFamily)}" font-size="14" font-weight="600" fill="${escapeXml(settings.weekdayTextColor)}">${WEEK_DAYS[day]}</text>`).join('');
       const scheduleOutline = settings.scheduleOutlineStyle === 'none' || settings.scheduleOutlineWidth === 0 ? '' : `<rect x="${settings.scheduleOutlineWidth / 2}" y="${settings.scheduleOutlineWidth / 2}" width="${width - settings.scheduleOutlineWidth}" height="${totalH - settings.scheduleOutlineWidth}" fill="none" stroke="${escapeXml(settings.scheduleOutlineColor)}" stroke-width="${settings.scheduleOutlineWidth}"/>`;
-      const calendarOutline = settings.calendarOutlineStyle === 'none' || settings.calendarOutlineWidth === 0 ? '' : `<rect x="0" y="${calendarTop}" width="${width}" height="${headerH + bodyH}" fill="none" stroke="${escapeXml(settings.calendarOutlineColor)}" stroke-width="${settings.calendarOutlineWidth}"/>`;
-      return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${totalH}" viewBox="0 0 ${width} ${totalH}">${bodyBg}${bgImage}${settings.headerText ? `<text x="${width / 2}" y="34" text-anchor="middle" font-family="${escapeXml(settings.fontFamily)}" font-size="24" font-weight="700" fill="${escapeXml(settings.scheduleTextColor)}">${escapeXml(settings.headerText)}</text>` : ''}<rect x="${timeWidth}" y="${calendarTop}" width="${width - timeWidth}" height="${headerH}" fill="${escapeXml(settings.weekdayHeaderColor)}"/><rect x="0" y="${calendarTop + headerH}" width="${timeWidth}" height="${bodyH}" fill="${escapeXml(settings.weekdayHeaderColor)}"/>${dayHeaders}<line x1="${timeWidth}" y1="${calendarTop}" x2="${timeWidth}" y2="${calendarTop + headerH + bodyH}" stroke="${escapeXml(settings.majorLineColor)}" stroke-width="1"/>${lines}${boxes}${calendarOutline}${settings.footerText ? `<text x="${width / 2}" y="${calendarTop + headerH + bodyH + calendarBottomSpacing + 30}" text-anchor="middle" font-family="${escapeXml(settings.fontFamily)}" font-size="13" fill="${escapeXml(settings.scheduleTextColor)}">${escapeXml(settings.footerText)}</text>` : ''}${scheduleOutline}</svg>`;
+      const calendarOutline = settings.calendarOutlineStyle === 'none' || settings.calendarOutlineWidth === 0 ? '' : `<rect x="0" y="${calendarTop}" width="${calendarWidth}" height="${headerH + bodyH}" fill="none" stroke="${escapeXml(settings.calendarOutlineColor)}" stroke-width="${settings.calendarOutlineWidth}"/>`;
+      return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${totalH}" viewBox="0 0 ${width} ${totalH}">${bodyBg}${settings.headerText ? `<text x="${width / 2}" y="34" text-anchor="middle" font-family="${escapeXml(settings.fontFamily)}" font-size="24" font-weight="700" fill="${escapeXml(settings.scheduleTextColor)}">${escapeXml(settings.headerText)}</text>` : ''}<g transform="translate(${calendarSpacing} 0)">${bgImage}<rect x="${timeWidth}" y="${calendarTop}" width="${calendarWidth - timeWidth}" height="${headerH}" fill="${escapeXml(settings.weekdayHeaderColor)}"/><rect x="0" y="${calendarTop + headerH}" width="${timeWidth}" height="${bodyH}" fill="${escapeXml(settings.weekdayHeaderColor)}"/>${dayHeaders}<line x1="${timeWidth}" y1="${calendarTop}" x2="${timeWidth}" y2="${calendarTop + headerH + bodyH}" stroke="${escapeXml(settings.majorLineColor)}" stroke-width="1"/>${lines}${boxes}${calendarOutline}</g>${settings.footerText ? `<text x="${width / 2}" y="${calendarTop + headerH + bodyH + calendarBottomSpacing + 30}" text-anchor="middle" font-family="${escapeXml(settings.fontFamily)}" font-size="13" fill="${escapeXml(settings.scheduleTextColor)}">${escapeXml(settings.footerText)}</text>` : ''}${scheduleOutline}</svg>`;
     }
-    const width = 1100;
+    const calendarWidth = 1100;
+    const width = calendarWidth + calendarSpacing * 2;
     const timeWidth = 70;
     const titleH = settings.headerText ? 56 : 0;
     const footerH = settings.footerText ? 48 : 0;
@@ -655,21 +657,21 @@ function App() {
     const headerH = settings.headerHeight;
     const bodyH = calendarHeight;
     const totalH = calendarTop + headerH + bodyH + calendarBottomSpacing + footerH;
-    const dayW = (width - timeWidth) / visibleDays.length;
+    const dayW = (calendarWidth - timeWidth) / visibleDays.length;
     const lineInc = Math.max(5, Number(settings.timeIncrement) || 15);
     const svgEvents = displayedEvents.filter((e) => visibleDays.includes(e.day) && timeToMinutes(e.end) > startMin && timeToMinutes(e.start) < endMin);
     const bg = settings.backgroundMode === 'transparent' ? 'none' : effectiveBackgroundColor(settings);
     const bodyBg = settings.backgroundMode === 'transparent' ? '' : `<rect x="0" y="0" width="${width}" height="${totalH}" fill="${escapeXml(bg)}"/>`;
     let bgImage = '';
     if (settings.backgroundMode === 'image' && settings.backgroundImage) {
-      bgImage = `<image href="${escapeXml(settings.backgroundImage)}" x="0" y="${calendarTop + headerH}" width="${width}" height="${bodyH}" preserveAspectRatio="${settings.backgroundImageFit === 'contain' ? 'xMidYMid meet' : settings.backgroundImageFit === 'stretch' ? 'none' : 'xMidYMid slice'}"/>`;
+      bgImage = `<image href="${escapeXml(settings.backgroundImage)}" x="0" y="${calendarTop + headerH}" width="${calendarWidth}" height="${bodyH}" preserveAspectRatio="${settings.backgroundImageFit === 'contain' ? 'xMidYMid meet' : settings.backgroundImageFit === 'stretch' ? 'none' : 'xMidYMid slice'}"/>`;
     }
     let lines = '';
     if (settings.lineMode !== 'none') {
       for (let t = Math.ceil(startMin / lineInc) * lineInc; t <= endMin; t += lineInc) {
         const y = calendarTop + headerH + (t - startMin) * PX_PER_MINUTE;
         const isHour = t % 60 === 0;
-        lines += `<line x1="${timeWidth}" y1="${y}" x2="${width}" y2="${y}" stroke="${escapeXml(isHour ? settings.majorLineColor : settings.minorLineColor)}" stroke-width="1"/>`;
+        lines += `<line x1="${timeWidth}" y1="${y}" x2="${calendarWidth}" y2="${y}" stroke="${escapeXml(isHour ? settings.majorLineColor : settings.minorLineColor)}" stroke-width="1"/>`;
         if (settings.showTimes) lines += `<text x="${timeWidth - 7}" y="${y + 4}" text-anchor="end" font-family="${escapeXml(settings.fontFamily)}" font-size="${isHour ? 12 : 11}" font-weight="${isHour ? 600 : 400}" fill="${escapeXml(settings.scheduleTextColor)}">${escapeXml(formatTime(t, isHour))}</text>`;
       }
       if (settings.lineMode === 'grid') {
@@ -692,8 +694,8 @@ function App() {
     });
     const dayHeaders = visibleDays.map((day, i) => `<text x="${timeWidth + i * dayW + dayW / 2}" y="${calendarTop + headerH / 2 + 5}" text-anchor="middle" font-family="${escapeXml(settings.fontFamily)}" font-size="14" font-weight="600" fill="${escapeXml(settings.weekdayTextColor)}">${WEEK_DAYS[day]}</text>`).join('');
     const scheduleOutline = settings.scheduleOutlineStyle === 'none' || settings.scheduleOutlineWidth === 0 ? '' : `<rect x="${settings.scheduleOutlineWidth / 2}" y="${settings.scheduleOutlineWidth / 2}" width="${width - settings.scheduleOutlineWidth}" height="${totalH - settings.scheduleOutlineWidth}" fill="none" stroke="${escapeXml(settings.scheduleOutlineColor)}" stroke-width="${settings.scheduleOutlineWidth}"/>`;
-    const calendarOutline = settings.calendarOutlineStyle === 'none' || settings.calendarOutlineWidth === 0 ? '' : `<rect x="0" y="${calendarTop}" width="${width}" height="${headerH + bodyH}" fill="none" stroke="${escapeXml(settings.calendarOutlineColor)}" stroke-width="${settings.calendarOutlineWidth}"/>`;
-    return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${totalH}" viewBox="0 0 ${width} ${totalH}">${bodyBg}${bgImage}${settings.headerText ? `<text x="${width / 2}" y="34" text-anchor="middle" font-family="${escapeXml(settings.fontFamily)}" font-size="24" font-weight="700" fill="${escapeXml(settings.scheduleTextColor)}">${escapeXml(settings.headerText)}</text>` : ''}<rect x="0" y="${calendarTop}" width="${width}" height="${headerH}" fill="${escapeXml(settings.weekdayHeaderColor)}"/>${dayHeaders}<line x1="${timeWidth}" y1="${calendarTop}" x2="${timeWidth}" y2="${calendarTop + headerH + bodyH}" stroke="${escapeXml(settings.majorLineColor)}" stroke-width="1"/>${lines}${boxes}${calendarOutline}${settings.footerText ? `<text x="${width / 2}" y="${calendarTop + headerH + bodyH + calendarBottomSpacing + 30}" text-anchor="middle" font-family="${escapeXml(settings.fontFamily)}" font-size="13" fill="${escapeXml(settings.scheduleTextColor)}">${escapeXml(settings.footerText)}</text>` : ''}${scheduleOutline}</svg>`;
+    const calendarOutline = settings.calendarOutlineStyle === 'none' || settings.calendarOutlineWidth === 0 ? '' : `<rect x="0" y="${calendarTop}" width="${calendarWidth}" height="${headerH + bodyH}" fill="none" stroke="${escapeXml(settings.calendarOutlineColor)}" stroke-width="${settings.calendarOutlineWidth}"/>`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${totalH}" viewBox="0 0 ${width} ${totalH}">${bodyBg}${settings.headerText ? `<text x="${width / 2}" y="34" text-anchor="middle" font-family="${escapeXml(settings.fontFamily)}" font-size="24" font-weight="700" fill="${escapeXml(settings.scheduleTextColor)}">${escapeXml(settings.headerText)}</text>` : ''}<g transform="translate(${calendarSpacing} 0)">${bgImage}<rect x="0" y="${calendarTop}" width="${calendarWidth}" height="${headerH}" fill="${escapeXml(settings.weekdayHeaderColor)}"/>${dayHeaders}<line x1="${timeWidth}" y1="${calendarTop}" x2="${timeWidth}" y2="${calendarTop + headerH + bodyH}" stroke="${escapeXml(settings.majorLineColor)}" stroke-width="1"/>${lines}${boxes}${calendarOutline}</g>${settings.footerText ? `<text x="${width / 2}" y="${calendarTop + headerH + bodyH + calendarBottomSpacing + 30}" text-anchor="middle" font-family="${escapeXml(settings.fontFamily)}" font-size="13" fill="${escapeXml(settings.scheduleTextColor)}">${escapeXml(settings.footerText)}</text>` : ''}${scheduleOutline}</svg>`;
   };
 
   const exportSvg = () => { downloadBlob(new Blob([svgString()], { type: 'image/svg+xml;charset=utf-8' }), 'weekly-schedule.svg'); setStatus('SVG exported.'); };
