@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "schedule": {
+    "events": [
+      {"id":"math39-mon","day":0,"start":"10:30","end":"11:45","title":"Mathematics-39  HGH 116","subtitle":"Patrick Murphy","color":"#d06b64","textColor":"#000000"},
+      {"id":"cs146-mon","day":0,"start":"12:00","end":"13:15","title":"Computer Science-146  MH 523","subtitle":"Preethi Natarajan","color":"#16a765","textColor":"#000000"},
+      {"id":"geol1-mon","day":0,"start":"13:30","end":"14:45","title":"Geology-1  DH 135","subtitle":"Matthew Leigh","color":"#f83a22","textColor":"#000000"}
+    ],
+    "settings": {
+      "weekdayHeaderColor": "#0956a3",
+      "timeIncrement": 15,
+      "lineMode": "horizontal"
+    }
+  }
+}

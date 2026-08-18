@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #0f172a;
+  background: #f1f5f9;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { min-height: 100%; }
+body { margin: 0; }
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+
+.control-label {
+  @apply mb-1 block text-[11px] font-semibold uppercase tracking-wide text-slate-500;
+}
+
+.control-input {
+  @apply w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100;
+}
+
+.panel-card {
+  @apply rounded-xl border border-slate-200 bg-white p-4 shadow-sm;
+}
+
+.preview-transparency-pattern {
+  background-color: #ffffff;
+  background-image: linear-gradient(45deg, #f8fafc 25%, transparent 25%), linear-gradient(-45deg, #f8fafc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f8fafc 75%), linear-gradient(-45deg, transparent 75%, #f8fafc 75%);
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+  background-size: 20px 20px;
+}
+
+/* Editor theme only: the schedule preview keeps its configured export colors. */
+.dark {
+  color: #e2e8f0;
+  background: #0f172a;
+}
+
+.dark .panel-card,
+.dark .bg-white {
+  background-color: #1e293b;
+}
+
+/* Keep a visible checkerboard against the dark editor without changing exported colors. */
+.dark .preview-transparency-pattern {
+  background-color: #0f172a;
+  background-image: linear-gradient(45deg, #1e293b 25%, transparent 25%), linear-gradient(-45deg, #1e293b 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #1e293b 75%), linear-gradient(-45deg, transparent 75%, #1e293b 75%);
+}
+
+.dark .bg-slate-100 { background-color: #0f172a; }
+.dark .bg-slate-50 { background-color: #334155; }
+.dark .bg-blue-50 { background-color: #172554; }
+.dark .text-slate-900,
+.dark .text-slate-800,
+.dark .text-slate-700 { color: #f1f5f9; }
+.dark .text-slate-600,
+.dark .text-slate-500 { color: #cbd5e1; }
+.dark .text-slate-400 { color: #94a3b8; }
+.dark .text-blue-700 { color: #93c5fd; }
+.dark .border-slate-100,
+.dark .border-slate-200 { border-color: #475569; }
+.dark .border-slate-700 { border-color: #475569; }
+.dark .pane-divider { background-color: #475569; }
+
+/* Firefox and Chromium/WebKit scrollbar styling for dark editor surfaces. */
+.dark * {
+  scrollbar-color: #64748b #0f172a;
+  scrollbar-width: thin;
+}
+.dark *::-webkit-scrollbar { width: 12px; height: 12px; }
+.dark *::-webkit-scrollbar-track { background: #0f172a; }
+.dark *::-webkit-scrollbar-thumb {
+  background: #475569;
+  border: 3px solid #0f172a;
+  border-radius: 999px;
+}
+.dark *::-webkit-scrollbar-thumb:hover { background: #64748b; }
+.dark *::-webkit-scrollbar-corner { background: #0f172a; }
+
+.dark .control-label { color: #94a3b8; }
+.dark .control-input {
+  border-color: #475569;
+  background-color: #0f172a;
+  color: #f1f5f9;
+}
+.dark select { color-scheme: dark; }
+.dark .control-input:focus {
+  border-color: #60a5fa;
+  --tw-ring-color: rgb(30 64 175 / 0.7);
+}
+.dark .hover\:bg-slate-50:hover { background-color: #334155; }
+.dark .hover\:bg-slate-100:hover { background-color: #334155; }
+.dark .hover\:bg-slate-800:hover { background-color: #334155; }
+.dark .bg-blue-50.text-blue-700 { color: #bfdbfe; }
+.dark .border-blue-100 { border-color: #1d4ed8; }
+.dark .bg-blue-50 { background-color: #172554; }
+.dark .text-blue-800 { color: #bfdbfe; }
+
+.dark input[type='color'] { border-color: #475569; background-color: #0f172a; }
+.dark select option { background-color: #0f172a; color: #f1f5f9; }

@@ -1,0 +1,114 @@
+{
+  "events": [
+    {
+      "id": "art110-mon",
+      "day": 0,
+      "start": "10:30",
+      "end": "11:45",
+      "title": "Art History 110  Hall 116",
+      "subtitle": "Dr. Rivera",
+      "color": "#d06b64",
+      "textColor": "#000000"
+    },
+    {
+      "id": "cs120-mon",
+      "day": 0,
+      "start": "12:00",
+      "end": "13:15",
+      "title": "Computer Science 120  Tech 204",
+      "subtitle": "Prof. Chen",
+      "color": "#16a765",
+      "textColor": "#000000"
+    },
+    {
+      "id": "bio101-mon",
+      "day": 0,
+      "start": "13:30",
+      "end": "14:45",
+      "title": "Biology 101  Science 135",
+      "subtitle": "Dr. Patel",
+      "color": "#f83a22",
+      "textColor": "#000000"
+    },
+    {
+      "id": "eng205-tue",
+      "day": 1,
+      "start": "12:00",
+      "end": "13:15",
+      "title": "English 205  Hall 250",
+      "subtitle": "Prof. Morgan",
+      "color": "#ffad46",
+      "textColor": "#000000"
+    },
+    {
+      "id": "econ150-tue",
+      "day": 1,
+      "start": "13:30",
+      "end": "14:45",
+      "title": "Economics 150  Building 450",
+      "subtitle": "Dr. Kim",
+      "color": "#4986e7",
+      "textColor": "#000000"
+    },
+    {
+      "id": "art110-wed",
+      "day": 2,
+      "start": "10:30",
+      "end": "11:45",
+      "title": "Art History 110  Hall 116",
+      "subtitle": "Dr. Rivera",
+      "color": "#d06b64",
+      "textColor": "#000000"
+    },
+    {
+      "id": "cs120-wed",
+      "day": 2,
+      "start": "12:00",
+      "end": "13:15",
+      "title": "Computer Science 120  Tech 204",
+      "subtitle": "Prof. Chen",
+      "color": "#16a765",
+      "textColor": "#000000"
+    },
+    {
+      "id": "bio101-wed",
+      "day": 2,
+      "start": "13:30",
+      "end": "14:45",
+      "title": "Biology 101  Science 135",
+      "subtitle": "Dr. Patel",
+      "color": "#f83a22",
+      "textColor": "#000000"
+    },
+    {
+      "id": "eng205-thu",
+      "day": 3,
+      "start": "12:00",
+      "end": "13:15",
+      "title": "English 205  Hall 250",
+      "subtitle": "Prof. Morgan",
+      "color": "#ffad46",
+      "textColor": "#000000"
+    },
+    {
+      "id": "econ150-thu",
+      "day": 3,
+      "start": "13:30",
+      "end": "14:45",
+      "title": "Economics 150  Building 450",
+      "subtitle": "Dr. Kim",
+      "color": "#4986e7",
+      "textColor": "#000000"
+    },
+    {
+      "id": "bio101-lab-fri",
+      "day": 4,
+      "start": "12:00",
+      "end": "14:45",
+      "title": "Biology 101 Lab  Science 311",
+      "subtitle": "Dr. Adams",
+      "color": "#f83a22",
+      "textColor": "#000000"
+    }
+  ]
+}
